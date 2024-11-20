@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 
-const productosFilePath = path.resolve('data', 'products.json');
+const productsFilePath = path.resolve('data', 'products.json');
 
 export default class ProductManager {
     //  Constructor
@@ -10,9 +10,11 @@ export default class ProductManager {
         this.init()
     }
 
+    // Los metodos init y save to file, se pueden heredar de una superclase para no repetir tanto codigo
+    
     async init() {
         try {
-            const data = await fs.readFile(productosFilePath, 'utf-8');
+            const data = await fs.readFile(productsFilePath, 'utf-8');
             this.products = JSON.parse(data);
         } catch (error) {
             this.products = [];
@@ -22,7 +24,7 @@ export default class ProductManager {
     // ** METODOS **
     async saveToFile() {
         const jsonData = JSON.stringify(this.products, null, 2);
-        await fs.writeFile(productosFilePath, jsonData);
+        await fs.writeFile(productsFilePath, jsonData);
     }
 
     // getAllProducts

@@ -11,7 +11,7 @@ const PORT = 8080;
 
 // ROUTER
 app.use("/api/products", productsRoutes);
-app.use("/api/cart", cartRoutes);
+app.use("/api/carts", cartRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server corriendo en el puerto ${PORT}`);
