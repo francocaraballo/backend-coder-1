@@ -42,13 +42,22 @@ export default class CartManager {
 
     addProductCart(idCart, idProduct, quantity) {
         const cart = this.getCartById(idCart);
-        const product = {
-            idProduct,
-            quantity,
+
+        const isRepeatProduct = cart.products.find( product => product.idProduct === idProduct)
+        
+        // mejorar para que se pueda agregar la cantidad que se desea y no de a una unidad
+        if(isRepeatProduct) {
+            isRepeatProduct.quantity++;
+        } else {
+            const product = {
+                idProduct,
+                quantity,
+            }
+            cart.products.push(product);
         }
-        cart.products.push(product);
+        
         this.saveToFile();
-        return product;
+        return
     }
 
 }
