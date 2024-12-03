@@ -108,5 +108,32 @@
     "thumbnails": [
       "img.jpg"
     ]
+  },
+  {
+    "id": 9,
+    "title": "Jogger",
+    "description": "Pantalon comodo para el dia adia",
+    "code": "JOGG01",
+    "price": 2990,
+    "status": true,
+    "stock": 14,
+    "category": "Pantalones",
+    "thumbnails": [
+      "url-de-prueba.jpg",
+      "url-de-prueba2.jpg"
+    ]
+  },
+  {
+    "id": 10,
+    "title": "Remera de Argentina",
+    "description": "Remera deportiva de la seleccion",
+    "code": "ARG22",
+    "price": 48000,
+    "status": true,
+    "stock": 3,
+    "category": "Remeras",
+    "thumbnails": [
+      "seleccion.jpg"
+    ]
   }
 ]

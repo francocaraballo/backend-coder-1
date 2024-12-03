@@ -62,7 +62,7 @@ function createProductCard ( item ) {
                         </a>
                     	<div class="mt-2 mb-5 flex items-center justify-between flex-col gap-4">
                          	<p>
-                            	<span class="text-3xl font-bold text-slate-900">${item.price}</span>
+                            	<span class="text-3xl font-bold text-slate-900">$${item.price}</span>
                         	</p>
                     		<div class="text-md text-slate-700">
                         		<p>${item.description}</p>
