@@ -7,8 +7,8 @@ const productManager = new ProductManager();
 
 router.get('/', (req, res) => {
     const limit = parseInt(req.query.limit);
-    const products = productManager.products
-    res.render('home', {products});
+    const products = productManager.products;
+    res.render('home', { products });
     return
 })
 

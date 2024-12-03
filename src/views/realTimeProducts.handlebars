@@ -1,1 +1,43 @@
-{{!-- Se tiene que renderizar la misma lista que en home pero trabaja con websockets --}}
+{{! Se tiene que renderizar la misma lista que en home pero trabaja con websockets }}
+<h1>Formulario para Crear Producto</h1>
+<div>
+	<form
+		action='/api/products'
+		method='POST'
+		enctype='application/json'
+		onsubmit='handleFormSubmit(event)'
+		
+	>
+		<label for='title'>Título:</label>
+		<input type='text' id='title' name='title' required /><br /><br />
+		<label for='description'>Descripción:</label>
+		<textarea id='description' name='description' required></textarea><br
+		/><br />
+		<label for='code'>Código:</label>
+		<input type='text' id='code' name='code' required /><br /><br />
+		<label for='price'>Precio:</label>
+		<input type='number' id='price' name='price' required /><br /><br />
+		<label for='status'>Estado:</label>
+		<select id='status' name='status'>
+			<option value='true'>Activo</option>
+			<option value='false'>Inactivo</option>
+		</select><br /><br />
+		<label for='stock'>Stock:</label>
+		<input type='number' id='stock' name='stock' required /><br /><br />
+		<label for='category'>Categoría:</label>
+		<input type='text' id='category' name='category' required /><br /><br />
+		<label for='thumbnails'>Imágenes (URLs):</label>
+		<div id='thumbnails-container'>
+			<input
+				type='text'
+				name='thumbnails[]'
+				placeholder='URL de imagen'
+			/><br />
+		</div>
+		<button type='button' onclick='addThumbnailInput()'>Agregar otra imagen</button><br
+		/><br />
+		<button type='submit'>Enviar</button>
+	</form>
+</div>
+<script src='/socket.io/socket.io.js'></script>
+<script src='/js/index.js'></script>

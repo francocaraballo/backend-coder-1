@@ -68,5 +68,19 @@
       "/images/gorra1.jpg",
       "/images/gorra2.jpg"
     ]
+  },
+  {
+    "id": 6,
+    "title": "Gorra Facha",
+    "description": "Gorra de visera.",
+    "code": "GOR567",
+    "price": 2500,
+    "status": true,
+    "stock": 50,
+    "category": "Accesorios",
+    "thumbnails": [
+      "/images/gorrafacha23.jpg",
+      "/images/gorrafacha05.jpg"
+    ]
   }
 ]
