@@ -27,6 +27,7 @@ app.use(express.static(__dirname + '/public'));
 app.use("/api/products", productsRoutes);
 app.use("/api/carts", cartRoutes);
 app.use("/realTimeProducts", realTimeProductsRoutes);
+app.use("/home", productsRoutes)
 
 // socket
 
