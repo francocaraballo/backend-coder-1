@@ -9,6 +9,7 @@ import { Server } from 'socket.io'
 import __dirname from './utils.js';
 const app = express();
 
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 
@@ -35,10 +36,15 @@ const httpServer = app.listen(PORT, () => {
 
 const socketServer = new Server(httpServer);
 
+const productsCreated = []
 socketServer.on('connection', socket => {
-    console.log("Nueva conexion")
+    console.log('conectado')
 
-    socket.on("mensaje", data => {
-        console.log("Recibido: ", data);
+    socket.on('product', data => {
+        productsCreated.push(data);
+        console.log(data)
+
+        socket.emit('products', productsCreated);
     })
+
 })

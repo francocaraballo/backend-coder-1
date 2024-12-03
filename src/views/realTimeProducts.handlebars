@@ -1,43 +1,84 @@
 {{! Se tiene que renderizar la misma lista que en home pero trabaja con websockets }}
-<h1>Formulario para Crear Producto</h1>
-<div>
-	<form
-		action='/api/products'
-		method='POST'
-		enctype='application/json'
-		onsubmit='handleFormSubmit(event)'
-		
-	>
-		<label for='title'>Título:</label>
-		<input type='text' id='title' name='title' required /><br /><br />
-		<label for='description'>Descripción:</label>
-		<textarea id='description' name='description' required></textarea><br
-		/><br />
-		<label for='code'>Código:</label>
-		<input type='text' id='code' name='code' required /><br /><br />
-		<label for='price'>Precio:</label>
-		<input type='number' id='price' name='price' required /><br /><br />
-		<label for='status'>Estado:</label>
-		<select id='status' name='status'>
-			<option value='true'>Activo</option>
-			<option value='false'>Inactivo</option>
-		</select><br /><br />
-		<label for='stock'>Stock:</label>
-		<input type='number' id='stock' name='stock' required /><br /><br />
-		<label for='category'>Categoría:</label>
-		<input type='text' id='category' name='category' required /><br /><br />
-		<label for='thumbnails'>Imágenes (URLs):</label>
-		<div id='thumbnails-container'>
-			<input
-				type='text'
-				name='thumbnails[]'
-				placeholder='URL de imagen'
-			/><br />
-		</div>
-		<button type='button' onclick='addThumbnailInput()'>Agregar otra imagen</button><br
-		/><br />
-		<button type='submit'>Enviar</button>
-	</form>
-</div>
+<body class="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
+    <div class="relative py-3 sm:max-w-xl sm:mx-auto">
+        <div class="absolute inset-0 bg-gradient-to-r from-cyan-400 to-light-blue-500 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
+        <div class="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
+            <div class="max-w-md mx-auto">
+                <div>
+                    <h1 class="text-2xl font-semibold text-center">Formulario de Productos</h1>
+                </div>
+                <form
+                    class="divide-y divide-gray-200"
+                    action="/api/products"
+                    method="POST"
+                    enctype="application/json"
+                    onsubmit="handleFormSubmit(event)"
+                >
+                    <div class="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
+                        <div class="flex flex-col">
+                            <label class="leading-loose" for="title">Título:</label>
+                            <input type="text" id="title" name="title" required class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" />
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="leading-loose" for="description">Descripción:</label>
+                            <textarea id="description" name="description" required class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" rows="4"></textarea>
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="leading-loose" for="code">Código:</label>
+                            <input type="text" id="code" name="code" required class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" />
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="leading-loose" for="price">Precio:</label>
+                            <input type="number" id="price" name="price" required class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" />
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="leading-loose" for="status">Estado:</label>
+                            <select id="status" name="status" class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600">
+                                <option value="true">Activo</option>
+                                <option value="false">Inactivo</option>
+                            </select>
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="leading-loose" for="stock">Stock:</label>
+                            <input type="number" id="stock" name="stock" required class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" />
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="leading-loose" for="category">Categoría:</label>
+                            <input type="text" id="category" name="category" required class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600" />
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="leading-loose">Imágenes (URLs):</label>
+                            <div id="thumbnails-container" class="space-y-2">
+                                <input
+                                    type="text"
+                                    name="thumbnails[]"
+                                    placeholder="URL de imagen"
+                                    class="px-4 py-2 border focus:ring-gray-500 focus:border-gray-900 w-full sm:text-sm border-gray-300 rounded-md focus:outline-none text-gray-600"
+                                />
+                            </div>
+                            <button
+                                type="button"
+                                onclick="addThumbnailInput()"
+                                class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                            >
+                                Agregar otra imagen
+                            </button>
+                        </div>
+                    </div>
+                    <div class="pt-4 flex items-center space-x-4">
+                        <button
+                            type="submit"
+                            class="bg-blue-500 flex justify-center items-center w-full text-white px-4 py-3 rounded-md focus:outline-none hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                        >
+                            Enviar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{!-- PRODUCTS --}}
+    <div class="flex flex-row flex-wrap" id="products-container"></div>
 <script src='/socket.io/socket.io.js'></script>
 <script src='/js/index.js'></script>
