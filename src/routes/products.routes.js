@@ -5,11 +5,10 @@ const router = Router();
 
 const productManager = new ProductManager();
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
     const limit = parseInt(req.query.limit);
-    const products = productManager.products;
-    res.render('home', { products });
-    return
+    const products =  await productManager.getAllProducts(limit || 10);
+    return res.render('home', { products });
 })
 
 router.get('/:id', (req, res) => {
