@@ -1,5 +1,9 @@
 import express from 'express';
+import mongoose from 'mongoose';
 import handlebars from 'express-handlebars';
+
+import { connectDB } from './utils/db.js';
+
 import productsRoutes from './routes/products.routes.js';
 import cartRoutes from './routes/cart.routes.js';
 import realTimeProductsRoutes from './routes/realTimeProducts.routes.js'
@@ -12,6 +16,8 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
+
+connectDB();
 
 const PORT = 8080;
 
@@ -27,16 +33,14 @@ app.use(express.static(__dirname + '/public'));
 app.use("/api/products", productsRoutes);
 app.use("/api/carts", cartRoutes);
 app.use("/realTimeProducts", realTimeProductsRoutes);
-app.use("/home", productsRoutes)
-
-// socket
 
 const httpServer = app.listen(PORT, () => {
     console.log(`Server corriendo en el puerto ${PORT}`);
 })
 
-const socketServer = new Server(httpServer);
 
+// estaria bueno refactorizar este codigo y ubicarlo en otro archivo
+const socketServer = new Server(httpServer);
 const productsCreated = []
 socketServer.on('connection', socket => {
     console.log('conectado')
