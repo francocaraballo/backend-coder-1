@@ -7,6 +7,7 @@ const productManager = new ProductManager();
 
 router.get('/', async (req, res) => {
     const limit = parseInt(req.query.limit);
+    const { page, query, sort } = req.query;
     const products =  await productManager.getAllProducts(limit || 10);
     return res.render('home', { products });
 })
