@@ -1,6 +1,8 @@
 import fs from 'fs/promises';
 import path from 'path';
 
+import productModel from '../models/product.model.js'
+
 const productsFilePath = path.resolve('data', 'products.json');
 
 export default class ProductManager {
@@ -16,6 +18,7 @@ export default class ProductManager {
         try {
             const data = await fs.readFile(productsFilePath, 'utf-8');
             this.products = JSON.parse(data);
+
         } catch (error) {
             this.products = [];
         }
