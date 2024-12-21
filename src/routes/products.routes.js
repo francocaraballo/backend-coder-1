@@ -6,15 +6,22 @@ const router = Router();
 const productManager = new ProductManager();
 
 router.get('/', async (req, res) => {
-    const limit = parseInt(req.query.limit);
-    const { page, query, sort } = req.query;
-    const products =  await productManager.getAllProducts(limit || 10);
-    return res.render('home', { products });
+    try {
+        const limit = parseInt(req.query.limit) || 10;
+        const { page = 1, query, sort } = req.query;
+
+        const data =  await productManager.getAll(limit , page, query, sort);
+        const { docs : products } = data;
+    res.render('home', { products });
+    return res.send(data)
+    } catch (error) {
+        console.log(error)
+    }
 })
 
-router.get('/:id', (req, res) => {
-    const id = parseInt(req.params.id);
-    const productById = productManager.products.find(product => product.id === id);
+router.get('/:id', async (req, res) => {
+    const id = req.params.id;
+    const productById = await productManager.getById(id);
 
     if (!productById) return res.status(404).send('The product does not exist');
     return res.send(productById);

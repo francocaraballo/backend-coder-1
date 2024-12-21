@@ -1,72 +1,60 @@
-import fs from 'fs/promises';
-import path from 'path';
-
 import productModel from '../models/product.model.js'
-
-const productsFilePath = path.resolve('data', 'products.json');
+import { toBoolean } from '../utils/helpers.js';
 
 export default class ProductManager {
     //  Constructor
     constructor() {
     }
 
-    async getAllProducts(limit) {
-        return await productModel.find().limit(limit).lean();
+    async getAll(limit, page, filter, sort) {
+        let sortOption = {};
+
+        // Determina el criterio de ordenación si sort está definido
+        if (sort === 'asc') {
+            sortOption = { price: 1 }; // Orden ascendente
+        } else if (sort === 'desc') {
+            sortOption = { price: -1 }; // Orden descendente
+        }
+
+        if(filter) {
+            if(filter === 'true' || filter === 'false'){
+                const filterByStatus = await productModel.paginate({ status: filter }, { limit, page, lean: true, sort: sortOption });
+                return filterByStatus;
+            } else{
+                const filterByCategory = await productModel.paginate({ category: filter }, { limit, page, lean: true, sort: sortOption });
+                return filterByCategory;
+            }
+            
+        }
+        const result = await productModel.paginate({}, { limit, page, lean: true, sort: sortOption });
+        return result;
+
     }
 
-
-    // getProductById
-    async getProductById(id) {
-        return this.products.find(product => product.id === id);
+    async getById(id) {
+        return await productModel.findById(id).lean();
     }
-
-    // addProduct
-    async addProduct(product) {
-        const { 
-            title,
-            description,
-            price,
-            stock,
-            category,
-            status,
-            thumbnails,
-        } = product;
-
-        const newProduct = await productModel.create({
-            title,
-            description,
-            price,
-            stock,
-            category,
-            status,
-            thumbnails,
-        });
-
-        return newProduct;
+    async add(product) {
+        try {
+            if (!product.title || !product.price || !product.stock) {
+                throw new Error("Title, price, and stock are required fields.");
+            }            
+            const newProduct = await productModel.create({ ...product });
+            return newProduct;
+        } catch (error) {
+            throw new Error(`Error adding product: ${error.message}`);
+        }
     }
 
     // updateProduct
-    async updateProduct(id, updatedFields) {
-        const productIndex = this.products.findIndex(product => product.id === id);
-        if (productIndex === -1) return null;
-
-        const updatedProduct = {
-            ...this.products[productIndex],
-            ...updatedFields,
-            id: this.products[productIndex].id, // Aseguramos que el ID no se actualice
-        };
-
-
-        this.products[productIndex] = updatedProduct;
-        this.saveToFile()
-        return updatedProduct;
+    async update(uid, updatedProduct) {
+        return await productModel.updateOne({_id: uid}, updatedProduct)
     }
 
     // deleteProduct
 
-    async deleteProduct(uid) {
-        const result = await productModel.deleteOne({ _id: uid});
-        return result;
+    async delete(uid) {
+        return await productModel.deleteOne({ _id: uid});
     }
 
 }
