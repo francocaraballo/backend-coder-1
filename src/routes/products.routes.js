@@ -12,8 +12,14 @@ router.get('/', async (req, res) => {
 
         const data =  await productManager.getAll(limit , page, query, sort);
         const { docs : products } = data;
-    res.render('home', { products });
-    return res.send(data)
+        res.render('home', { products });
+
+        const resData = {
+            status: 'success',
+            payload
+        }
+
+        return res.send(data)
     } catch (error) {
         console.log(error)
     }
