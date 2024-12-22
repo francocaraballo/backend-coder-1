@@ -12,28 +12,35 @@ router.get('/', async (req, res) => {
 
         const data =  await productManager.getAll(limit , page, query, sort);
         const { docs : products } = data;
-        res.render('home', { products });
+        // res.render('home', { products });
 
         const resData = {
             status: 'success',
-            payload
+            payload: data.docs,
+            ...data
         }
 
-        return res.send(data)
+        return res.send(resData);
     } catch (error) {
         console.log(error)
+        res.status(500).send({status: "error", error: error.menssage})
     }
 })
 
 router.get('/:id', async (req, res) => {
-    const id = req.params.id;
-    const productById = await productManager.getById(id);
+    try {
+        const id = req.params.id;
+        const productById = await productManager.getById(id);
 
-    if (!productById) return res.status(404).send('The product does not exist');
-    return res.send(productById);
+        if (!productById) return res.status(404).send('The product does not exist');
+        return res.send(productById);
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({status: "error", error: error.menssage})
+    }
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     const {
         title,
         description, 
@@ -44,9 +51,6 @@ router.post('/', (req, res) => {
         category, 
         thumbnails 
     } = req.body;
-
-    // VALIDAR QUE TODAS LAS PROPS SON ENVIADAS
-
 
     const newProduct = {
         title,
@@ -59,20 +63,29 @@ router.post('/', (req, res) => {
         thumbnails 
     };
 
-    productManager.addProduct(newProduct);
+    if (!newProduct.title ||!newProduct.price ||!newProduct.stock || !newProduct.description|| !newProduct.code 
+        || !newProduct.status|| !newProduct.category|| !newProduct.thumbnails){
+        return res.status(400).send({ status: "error", error: "Incompleted values"});
+    }
 
-    return res.status(201).send(newProduct);
+    try {
+        await productManager.add(newProduct);
+        return res.status(201).send(newProduct);
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({status: "error", error: error.message})
+    }
 })
 
 router.put('/:id', async (req, res) => {
     try {
-        const productId = parseInt(req.params.id);
+        const productId = req.params.id;
 
-        const updatedProduct = await productManager.updateProduct(productId, req.body);
+        const updatedProduct = await productManager.update(productId, req.body);
         if (updatedProduct) {
-            res.json(updatedProduct);
+            res.send(updatedProduct);
         } else {
-            res.status(404).json({ error: 'Product not found' });
+            res.status(404).send({status: "error", error: 'Product not found' });
         }
     } catch (error) {
         console.log(error);
@@ -81,15 +94,16 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
     try {
-        const productId = parseInt(req.params.id);
-        const deletedProduct = await productManager.deleteProduct(productId);
+        const productId = req.params.id;
+        const deletedProduct = await productManager.delete(productId);
         if (deletedProduct) {
-            res.json(deletedProduct);
+            return res.send(deletedProduct);
         } else {
-            res.status(404).json({ error: 'Product not found' });
+            return res.status(404).send({status: "error", error: 'Product not found' });
         }
     } catch (error) {
         console.log(error);
+        return res.status(500),send({status: "error", error: error.message})
     }
 })
 export default router;
