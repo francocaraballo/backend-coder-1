@@ -1,53 +1,26 @@
-import fs from 'fs/promises';
-import path from 'path';
-import { uid } from 'uid';
-
-const cartsFilePath = path.resolve('data', 'carts.json');
+import cartModel from '../models/cart.model.js'
+import cartModel from 'src/models/cart.model';
 
 export default class CartManager {
     constructor() {
-        this.carts = [];
-        this.init();
     }
 
-    async init() {
-        try {
-            const data = await fs.readFile(cartsFilePath, 'utf-8');
-            this.carts = JSON.parse(data);
-        } catch (error) {
-            this.carts = [];
-        }
+    async create(products = []) {
+        return await cartModel.create({ products })
     }
 
-    async saveToFile() {
-        const jsonData = JSON.stringify(this.carts, null, 2);
-        await fs.writeFile(cartsFilePath, jsonData);
+    async getById(id) {
+        return await cartModel.findById(id).lean();
     }
 
-    createCart() {
-        const cart = {
-            id: uid(),
-            products: []
-        }
-
-        this.carts.push(cart);
-        this.saveToFile();
-
-        return cart;
-    }
-
-    getCartById(id) {
-        return this.carts.find(cart => cart.id == id );
-    }
-
-    addProductCart(idCart, idProduct, quantity) {
+    async addProduct(idCart, idProduct, qty) {
         const cart = this.getCartById(idCart);
 
-        const isRepeatProduct = cart.products.find( product => product.idProduct === idProduct)
+        const isRepeatProduct = cart.products.find( product => product._id === idProduct)
         
         // mejorar para que se pueda agregar la cantidad que se desea y no de a una unidad
         if(isRepeatProduct) {
-            isRepeatProduct.quantity++;
+            isRepeatProduct.quantity += qty;
         } else {
             const product = {
                 idProduct,
@@ -56,8 +29,20 @@ export default class CartManager {
             cart.products.push(product);
         }
         
-        this.saveToFile();
-        return
+        return await cartModel.updateOne({ idCart }, cart);
     }
+
+    async update (idCart, products) {
+        return await cartModel.updateOne({idCart}, products)
+
+    }
+
+    async deleteProduct(idCart, idProduct) {
+        const cart = await this.getById(idCart);
+        const result = cart.products.filter(product => product._id !== idProduct);
+
+        return await this.update(idCart, result);
+    }
+
 
 }

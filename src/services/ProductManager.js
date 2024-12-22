@@ -1,5 +1,4 @@
 import productModel from '../models/product.model.js'
-import { toBoolean } from '../utils/helpers.js';
 
 export default class ProductManager {
     //  Constructor
