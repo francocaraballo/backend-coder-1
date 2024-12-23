@@ -32,7 +32,7 @@ app.use(express.static(__dirname + '/public'));
 
 // ROUTER
 app.use("/api/products", productsRoutes);
-app.use("/api/carts", cartRoutes);
+app.use("/api/cart", cartRoutes);
 app.use("/realTimeProducts", realTimeProductsRoutes);
 
 const httpServer = app.listen(PORT, () => {

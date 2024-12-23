@@ -1,5 +1,6 @@
-import cartModel from '../models/cart.model.js'
-import cartModel from 'src/models/cart.model';
+import cartModel from '../models/cart.model.js';
+import mongoose from 'mongoose';
+
 
 export default class CartManager {
     constructor() {
@@ -8,11 +9,49 @@ export default class CartManager {
     async create(products = []) {
         return await cartModel.create({ products })
     }
-
+    
     async getById(id) {
-        return await cartModel.findById(id).lean();
+        return await cartModel.find({ _id: id} ).lean();
+    }
+    
+    async update (idCart, products) {
+        try {
+            const result = await cartModel.updateOne(
+                { _id: idCart },
+                {
+                  $set: {
+                    products
+                  },
+                }
+              );
+            return result;
+          } catch (error) {
+            console.error(error.message);
+            throw error;
+          }
+
     }
 
+    async updateProductQty(idCart, idProduct, qty) {
+        try {
+          const result = await cartModel.updateOne(
+            { _id: idCart, 'products.product': idProduct }, // Busca el carrito y el producto
+            {
+              $set: {
+                'products.$.quantity': qty, // Actualiza la propiedad quantity del producto
+              },
+            }
+          );
+          if (result.matchedCount === 0) {
+            throw new Error('Failed to update product quantity with id: ' + idProduct);
+          }
+          return result;
+        } catch (error) {
+          console.error('Fail to update:', error.message);
+          throw error;
+        }
+      }
+      
     async addProduct(idCart, idProduct, qty) {
         const cart = this.getCartById(idCart);
 
@@ -32,17 +71,28 @@ export default class CartManager {
         return await cartModel.updateOne({ idCart }, cart);
     }
 
-    async update (idCart, products) {
-        return await cartModel.updateOne({idCart}, products)
-
+    async delete(idCart){
+        return await cartModel.deleteOne({_id: idCart});
     }
+
 
     async deleteProduct(idCart, idProduct) {
-        const cart = await this.getById(idCart);
-        const result = cart.products.filter(product => product._id !== idProduct);
-
-        return await this.update(idCart, result);
+        try {
+            const result = await cartModel.updateOne(
+                { _id: idCart },
+                {
+                  $pull: {
+                    products: {
+                      product: idProduct, // Verifica que sea un ObjectId
+                    },
+                  },
+                }
+              );
+            return result;
+          } catch (error) {
+            console.error(error.message);
+            throw error;
+          }
     }
-
 
 }
