@@ -6,7 +6,8 @@ import { config } from './utils/config.js';
 
 import productsRoutes from './routes/products.routes.js';
 import cartRoutes from './routes/cart.routes.js';
-import realTimeProductsRoutes from './routes/realTimeProducts.routes.js'
+import realTimeProductsRoutes from './routes/realTimeProducts.routes.js';
+import viewProductsRoutes from './routes/productsView.routes.js';
 
 import { Server } from 'socket.io'
 
@@ -34,6 +35,7 @@ app.use(express.static(__dirname + '/public'));
 app.use("/api/products", productsRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/realTimeProducts", realTimeProductsRoutes);
+app.use("/products", viewProductsRoutes);
 
 const httpServer = app.listen(PORT, () => {
     console.log(`Server run on port: ${PORT}`);

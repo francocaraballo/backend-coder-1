@@ -1,6 +1,4 @@
 import cartModel from '../models/cart.model.js';
-import mongoose from 'mongoose';
-
 
 export default class CartManager {
     constructor() {
