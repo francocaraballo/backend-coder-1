@@ -1,17 +1,17 @@
 import { Router } from 'express';
 import CartManager from '../services/CartManager.js';
+import cartModel from '../models/cart.model.js';
 
 const router = Router();
 
 const cartManager = new CartManager();
 
 router.get('/:id', async (req, res) => {
-    // buscar carrito por id
     const id = req.params.id;
     try {
-        const cartById = await cartManager.getById(id);
-        if(!cartById) return res.status(404).json({ error: "Product not found"});
-    return res.json(cartById);  
+        const result = await cartModel.findOne({ _id: id}).populate('products.product').lean();
+        if(!result) return res.status(404).json({ error: "Product not found"});
+    return res.json(result);  
     } catch (error) {
         console.log(error)
         return res.status(404).json({ error: "Product not found"});
@@ -20,8 +20,6 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     const products = req.body.products;
-    // metodo para crear un carrito, id, products(ARRAY de objetos)
-    console.log(products)
     try {
         const newCart = await cartManager.create(products);
         res.status(201).send({ status: "success", message: "Cart created successfully", result: newCart});
@@ -34,10 +32,10 @@ router.post('/', async (req, res) => {
 router.post('/:cid/product/:pid', (req, res) => {
     try {
         const { cid, pid } = req.params;
-        const { quantity } = req.body;
+        const { quantity = 1 } = req.body;
 
-        const itemUpdated = cartManager.addProduct(cid, pid, quantity);
-        return res.json(itemUpdated);
+        const result = cartManager.addProduct(cid, pid, quantity);
+        return res.send({ status: "success", message: "Product added successfully", result });
     } catch (error) {
         console.log(error);
     }
@@ -46,7 +44,7 @@ router.post('/:cid/product/:pid', (req, res) => {
 router.delete('/:cid', async (req, res) => {
     const { cid } = req.params;
     try {
-        const result = await cartManager.delete(cid);
+        await cartManager.delete(cid);
         return res.status(200).send({ status: "success", message: `Cart id ${cid} deleted`});
     } catch (error) {
         console.log(error);

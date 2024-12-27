@@ -1,0 +1,10 @@
+{{#if cart.products}}
+    <h1>Your Cart</h1>
+    <ul>
+        {{#each cart.products}}
+        <li>{{this.product.title}} - ${{this.product.price}}</li>
+        {{/each}}
+    </ul>
+    {{else}}
+    <h1>Your Cart is Empty</h1>
+    {{/if}}

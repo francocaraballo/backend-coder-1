@@ -11,8 +11,6 @@ router.get('/', async (req, res) => {
         const { page = 1, query, sort } = req.query;
 
         const data =  await productManager.getAll(limit , page, query, sort);
-        const { docs : products } = data;
-        // res.render('home', { products });
 
         const resData = {
             status: 'success',

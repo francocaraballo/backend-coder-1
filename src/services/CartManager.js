@@ -9,7 +9,9 @@ export default class CartManager {
     }
     
     async getById(id) {
-        return await cartModel.find({ _id: id} ).lean();
+        const result = await cartModel.findOne({ _id: id}).lean();
+        console.log(result)
+        return result;
     }
     
     async update (idCart, products) {
@@ -51,22 +53,33 @@ export default class CartManager {
       }
       
     async addProduct(idCart, idProduct, qty) {
-        const cart = this.getCartById(idCart);
+        try {
+            const cart = await cartModel.findOne({ _id: idCart }).lean();
 
-        const isRepeatProduct = cart.products.find( product => product._id === idProduct)
-        
-        // mejorar para que se pueda agregar la cantidad que se desea y no de a una unidad
-        if(isRepeatProduct) {
-            isRepeatProduct.quantity += qty;
-        } else {
-            const product = {
-                idProduct,
-                quantity,
+            if (!cart) {
+                throw new Error("Cart not found");
             }
-            cart.products.push(product);
+
+            const productToAdd = cart.products.find(({ product: id }) => id.toString() === idProduct);
+
+            if (!productToAdd) {
+              const newProduct = {
+                product: idProduct,
+                quantity: qty,
+              };
+              cart.products.push(newProduct);
+            } else {
+              productToAdd.quantity += qty;
+            }
+
+          return await cartModel.updateOne(
+            { _id: idCart },
+            { products: cart.products }
+          );
+        } catch (error) {
+            console.error(error.message);
+            throw error;
         }
-        
-        return await cartModel.updateOne({ idCart }, cart);
     }
 
     async delete(idCart){
@@ -81,7 +94,7 @@ export default class CartManager {
                 {
                   $pull: {
                     products: {
-                      product: idProduct, // Verifica que sea un ObjectId
+                      product: idProduct,
                     },
                   },
                 }
