@@ -52,7 +52,6 @@ router.get('/cart/:id', async (req, res) => {
     try {
         const cart = await cartModel.findOne({ _id: id}).populate('products.product').lean();
         if(!cart) return res.status(404).json({ error: "Product not found"});
-        console.log(cart)
         return res.render('cart', { cart });  
     } catch (error) {
         console.log(error)

@@ -1,10 +1,41 @@
-{{#if cart.products}}
-    <h1>Your Cart</h1>
-    <ul>
-        {{#each cart.products}}
-        <li>{{this.product.title}} - ${{this.product.price}} - Quantity: {{this.quantity}}</li>
-        {{/each}}
-    </ul>
+<div class="container mx-auto p-4">
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Shopping Cart</h2>
+    {{#if cart.products}}
+            <div class="space-y-4">
+                <!-- Producto 1 -->
+            {{#each cart.products}}
+                <div class="flex items-center justify-between py-2 border-b flex-wrap">
+                    <div class="flex items-center flex-wrap">
+                        <img src="https://i0.wp.com/port2flavors.com/wp-content/uploads/woocommerce-placeholder.png?fit=1200%2C1200&ssl=1" alt="Producto 1" class="w-24 h-24 object-cover rounded-lg">
+                        <h3 class="font-semibold">{{this.product.title}}</h3>
+                    </div>
+                    <div class="flex items-center space-x-2 flex-wrap">
+                        <div class="flex items-center border rounded-md overflow-hidden">
+                            <button class="px-2 py-1 bg-gray-100 hover:bg-gray-200 transition duration-150 ease-in-out">-</button>
+                            <span class="px-2 py-1 bg-white">{{this.quantity}}</span>
+                            <button class="px-2 py-1 bg-gray-100 hover:bg-gray-200 transition duration-150 ease-in-out">+</button>
+                        </div>
+                        <span class="font-semibold ml-6">${{this.product.price}}</span>
+                    </div>
+                </div>
+            {{/each}}               
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold">Total: </h3>
+                <span class="text-xl font-bold">${{this.product.price}}</span>
+            </div>
+            <button class="block mx-auto w-full max-w-72 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300">
+                Buy
+            </button>
+    </div>
+</div>
     {{else}}
-    <h1>Your Cart is Empty</h1>
+        <h1>Your Cart is Empty</h1>
     {{/if}}
+
+
+
