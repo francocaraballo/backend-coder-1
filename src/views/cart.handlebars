@@ -2,7 +2,7 @@
     <h1>Your Cart</h1>
     <ul>
         {{#each cart.products}}
-        <li>{{this.product.title}} - ${{this.product.price}}</li>
+        <li>{{this.product.title}} - ${{this.product.price}} - Quantity: {{this.quantity}}</li>
         {{/each}}
     </ul>
     {{else}}

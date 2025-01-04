@@ -1,0 +1,58 @@
+<section class='h-screen flex items-center justify-center bg-gray-100'>
+	<div class='container mx-auto px-4'>
+		<div class='lg:grid lg:grid-cols-2 lg:gap-x-8'>
+			<!-- Imagen del producto -->
+			<div class='lg:max-w-lg lg:self-end'>
+				<div class='overflow-hidden rounded-lg'>
+					<img
+						src='https://i0.wp.com/port2flavors.com/wp-content/uploads/woocommerce-placeholder.png?fit=1200,1200&ssl=1'
+						alt='Imagen del producto'
+						class='w-full h-full object-center object-cover'
+					/>
+				</div>
+			</div>
+
+			<div class='mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-20'>
+				<h1
+					class='text-3xl font-extrabold tracking-tight text-gray-900'
+				>{{this.title}}</h1>
+
+				<div class='mt-6'>
+					<h3 class='sr-only'>Description</h3>
+					<p class='text-base text-gray-700'>
+						{{this.description}}
+					</p>
+				</div>
+
+				<div class='mt-8 flex justify-between items-center'>
+					<span
+						class='text-2xl font-extrabold text-gray-900'
+					>${{this.price}},00</span>
+				</div>
+
+				<div class='mt-10'>
+					<button
+						type='button'
+						class='btn-add-to-cart w-full bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+                        data-id="{{this._id}}"
+                    >
+						<svg
+							class='mr-2 h-5 w-5'
+							xmlns='http://www.w3.org/2000/svg'
+							viewBox='0 0 20 20'
+							fill='currentColor'
+							aria-hidden='true'
+						>
+							<path
+								d='M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z'
+							/>
+						</svg>
+						Add to cart
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script src="/js/index.js"></script>

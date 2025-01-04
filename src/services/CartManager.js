@@ -60,7 +60,7 @@ export default class CartManager {
                 throw new Error("Cart not found");
             }
 
-            const productToAdd = cart.products.find(({ product: id }) => id.toString() === idProduct);
+            const productToAdd = cart.products.find(({ product: id }) => id === idProduct);
 
             if (!productToAdd) {
               const newProduct = {
@@ -71,11 +71,11 @@ export default class CartManager {
             } else {
               productToAdd.quantity += qty;
             }
-
-          return await cartModel.updateOne(
-            { _id: idCart },
-            { products: cart.products }
-          );
+            
+            return await cartModel.updateOne(
+              { _id: idCart },
+              { products: cart.products }
+            );
         } catch (error) {
             console.error(error.message);
             throw error;
@@ -85,7 +85,6 @@ export default class CartManager {
     async delete(idCart){
         return await cartModel.deleteOne({_id: idCart});
     }
-
 
     async deleteProduct(idCart, idProduct) {
         try {

@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import ProductManager from '../services/ProductManager.js';
 import CartManager from '../services/CartManager.js';
+import cartModel from '../models/cart.model.js';
 
 const router = Router();
 
@@ -49,13 +50,15 @@ router.get('/products/:id', async (req, res) => {
 router.get('/cart/:id', async (req, res) => {
     const id = req.params.id;
     try {
-        const cart = await cartManager.getById(id).populate('products.product');
-
+        const cart = await cartModel.findOne({ _id: id}).populate('products.product').lean();
+        if(!cart) return res.status(404).json({ error: "Product not found"});
+        console.log(cart)
         return res.render('cart', { cart });  
     } catch (error) {
         console.log(error)
-        return res.status(404).json({ error: "Product not found"});
+        return res.status(404).json({ status: "error", message: "Error getting cart"});
     }
 })
+
 
 export default router;

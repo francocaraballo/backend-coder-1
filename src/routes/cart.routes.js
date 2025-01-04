@@ -11,7 +11,7 @@ router.get('/:id', async (req, res) => {
     try {
         const result = await cartModel.findOne({ _id: id}).populate('products.product').lean();
         if(!result) return res.status(404).json({ error: "Product not found"});
-    return res.json(result);  
+        return res.json(result);  
     } catch (error) {
         console.log(error)
         return res.status(404).json({ error: "Product not found"});
@@ -35,7 +35,7 @@ router.post('/:cid/product/:pid', (req, res) => {
         const { quantity = 1 } = req.body;
 
         const result = cartManager.addProduct(cid, pid, quantity);
-        return res.send({ status: "success", message: "Product added successfully", result });
+        return res.send({ status: "success", message: "Product added successfully"});
     } catch (error) {
         console.log(error);
     }
